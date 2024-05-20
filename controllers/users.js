@@ -23,10 +23,17 @@ const sendUserDeleted = (req, res) => {
   res.end(JSON.stringify(req.user));
 };
 
+/* нужна функция sendMe для получения юзера */
+const sendMe = (req, res) => {
+  res.setHeader("Content-Type", "application/json");
+  res.end(JSON.stringify(req.user));
+};
+
 module.exports = {
   sendAllUsers,
   sendUserById,
   sendUserCreated,
+  sendMe,
   sendUserUpdated,
   sendUserDeleted,
 };
