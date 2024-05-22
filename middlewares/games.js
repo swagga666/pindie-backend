@@ -1,10 +1,20 @@
 const games = require("../models/game");
 
 const findAllGames = async (req, res, next) => {
-  req.gamesArray = await games
+  const categoryName = req.query["categories.name"];
+
+  let gamesArray = await games
     .find({})
     .populate("categories")
-    .populate({ path: "users", slelect: "-password" });
+    .populate({ path: "users", select: "-password" });
+
+  if (categoryName) {
+    gamesArray = gamesArray.filter((game) =>
+      game.categories.some((category) => category.name === categoryName)
+    );
+  }
+
+  req.gamesArray = gamesArray;
   next();
 };
 
@@ -19,10 +29,13 @@ const createGame = async (req, res, next) => {
 
 const findGameById = async (req, res, next) => {
   try {
-    req.game = games
+    req.game = await games
       .findById(req.params.id)
       .populate("categories")
-      .populate("users");
+      .populate({
+        path: "users",
+        select: "-password",
+      });
     next();
   } catch (error) {
     res.status(404).send({ message: "Игра не найдена" });
