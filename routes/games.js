@@ -5,6 +5,7 @@ const {
   sendGameCreated,
   sendGameUpdated,
   sendGameDeleted,
+  sendGameById,
 } = require("../controllers/games");
 const { checkAuth } = require("../middlewares/auth");
 const {
@@ -16,6 +17,7 @@ const {
 } = require("../middlewares/games");
 
 gamesRouter.get("/games", findAllGames, sendAllGames);
+gamesRouter.get("/games/:id", findGameById, sendGameById);
 gamesRouter.post(
   "/games",
   findAllGames,
